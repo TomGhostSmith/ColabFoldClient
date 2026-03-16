@@ -33,7 +33,7 @@ def getResult(id):
 def main():
     id = "sp|P54025|RL41_METJA"
     seq = "MIPIKRSSRRWKKKGRMRWKWYKKRLRRLKRERKRARS"
-    submitJob(id, seq)
+    submitJob({id: seq})
     while not getResult(id):
         time.sleep(5)
     print("result saved")

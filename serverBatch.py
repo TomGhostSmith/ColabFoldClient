@@ -61,6 +61,23 @@ def submit():
 
     return jsonify({}), 202
 
+@app.route("/submitJobs", methods=["POST"])
+def submitJobs():
+    data = request.get_json()
+    if not data or "jobs" not in data:
+        return jsonify({"error": "request format error"}), 400
+
+    jobs:dict = data["jobs"]
+    lock.acquire()
+    for id, seq in jobs.items():
+        solidID = getSolidID(id)
+        queue.append((solidID, seq))
+    event.set()
+    print("event set")
+    lock.release()
+
+    return jsonify({}), 202
+
 
 @app.route("/getResult/<id>", methods=["GET"])
 def getResult(id):
